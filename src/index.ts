@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import { logger } from "./utils/logger";
 import ingestRoutes from "./routes/ingest.routes";
 import queryRoutes from "./routes/query.routes";
+import authRoutes from "./routes/auth.routes";
 
 dotenv.config();
 
@@ -13,6 +14,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 // Routes
+app.use("/auth", authRoutes);
 app.use("/ingest", ingestRoutes);
 app.use("/query", queryRoutes);
 

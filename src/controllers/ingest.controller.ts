@@ -7,10 +7,6 @@ export const ingestEvent = async (req: Request, res: Response) => {
   try {
     const { source, payload, timestamp } = req.body;
 
-    if (!source || !payload) {
-      return res.status(400).json({ error: "Missing source or payload" });
-    }
-
     // Generate ID if not present in payload, but usually it's passed or we generate a system ID.
     // Prompt says "Idempotent ingestion", implying duplicates might be sent. 
     // If client sends an ID, we use it. If not, we generate one, but then we can't dedup retries unless payload hash.
@@ -20,12 +16,14 @@ export const ingestEvent = async (req: Request, res: Response) => {
 
     const event_id = req.body.event_id || uuidv4();
     const eventTimestamp = timestamp ? new Date(timestamp) : new Date();
+    const userId = req.user?.id;
 
     await ingestQueue.add("telemetry-event", {
       event_id,
       timestamp: eventTimestamp,
       source,
-      payload
+      payload,
+      userId
     }, {
       jobId: event_id, // Deduplication in queue
       removeOnComplete: true,

@@ -3,6 +3,8 @@ import { DataSource } from "typeorm";
 import { TelemetryEvent } from "./entities/TelemetryEvent";
 import dotenv from "dotenv";
 
+import { User } from "./entities/User";
+
 dotenv.config();
 
 export const AppDataSource = new DataSource({
@@ -14,7 +16,7 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_NAME || "telemetry",
   synchronize: false, // We will use migrations
   logging: false,
-  entities: [TelemetryEvent],
+  entities: [TelemetryEvent, User],
   migrations: ["src/migrations/*.ts"],
   subscribers: [],
 });

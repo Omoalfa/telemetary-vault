@@ -41,3 +41,18 @@ Telemetry Vault is a high-throughput ingestion service designed to handle teleme
     - High Queue Depth (> 1000 items).
     - High Error Rate (> 1%).
     - DB CPU/Memory usage.
+
+## Authentication Design
+- **Current Approach (Mock)**:
+  - Users sign up with just an email (and optional name).
+  - A static or simple random string is generated as an API Key.
+  - Authentication is done by looking up the user by this API Key in the database.
+  - **Purpose**: This is sufficient to demonstrate the protected routes and relation between Users and Telemetry Events without the complexity of full OAuth/JWT flows.
+
+- **Real-World Scenario**:
+  - **Identity Provider (IdP)**: We would use a service like Auth0, Clerk, or Firebase Auth.
+  - **JWT Tokens**: The client would authenticate with the IdP and send a Bearer Token (JWT).
+  - **API Keys**: For machine-to-machine communication (like the telemetry ingestion), we would issue cryptographically secure API keys (e.g., hashed in DB using bcrypt/argon2).
+  - **Rotation**: API keys would be rotatable.
+  - **Scopes**: API keys would have granular permissions (e.g., `write:events`).
+  - **Rate Limiting per Key**: Distinct rate limits for different user tiers.

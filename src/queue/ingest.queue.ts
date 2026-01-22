@@ -13,7 +13,7 @@ export const ingestQueue = new Queue("ingest-queue", { connection });
 // Initialize Worker
 const worker = new Worker("ingest-queue", async (job) => {
   try {
-    const { event_id, timestamp, source, payload } = job.data;
+    const { event_id, timestamp, source, payload, userId } = job.data;
 
     if (!AppDataSource.isInitialized) {
       await AppDataSource.initialize();
@@ -29,7 +29,8 @@ const worker = new Worker("ingest-queue", async (job) => {
         event_id,
         timestamp,
         source,
-        payload
+        payload,
+        user: { id: userId }
       })
       .orIgnore()
       .execute();

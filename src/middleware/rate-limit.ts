@@ -6,7 +6,7 @@ import { Request, Response, NextFunction } from "express";
 // The prompt says "mock acceptable".
 
 const WINDOW_SIZE_IN_SECONDS = 60;
-const MAX_REQUESTS_PER_WINDOW = 1000;
+const MAX_REQUESTS_PER_WINDOW = 500;
 const ipMap = new Map<string, { count: number, resetTime: number }>();
 
 export const rateLimit = (req: Request, res: Response, next: NextFunction) => {

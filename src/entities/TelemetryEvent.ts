@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, Index, Unique } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, Index, Unique, ManyToOne } from "typeorm";
+import { User } from "./User";
 
 @Entity()
 @Unique(["event_id"])
@@ -22,4 +23,7 @@ export class TelemetryEvent {
 
   @CreateDateColumn()
   created_at!: Date;
+
+  @ManyToOne(() => User, (user) => user.events)
+  user!: User;
 }
